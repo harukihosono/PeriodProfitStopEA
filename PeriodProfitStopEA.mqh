@@ -1007,7 +1007,7 @@ void CloseAllPositions()
 void CreateDisplay()
 {
    // 背景パネルの作成
-   int panelWidth = 350;
+   int panelWidth = 400;
    int panelHeight = 360;
    CreatePanel(g_prefix + "Background", DisplayX - 5, DisplayY - 5, panelWidth, panelHeight);
 
