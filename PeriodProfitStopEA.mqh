@@ -1064,16 +1064,21 @@ void UpdateDisplay()
       UpdateLabelSize(g_prefix + "Status", baseFontSize + 1);
    }
 
+   // 停止時以外の基本色を調整
+   color periodModeColor = g_targetReached ? baseColor : clrWhiteSmoke;
+   color startTimeColor = g_targetReached ? grayColor : clrWhiteSmoke;
+   color balanceColor = g_targetReached ? baseColor : clrWhiteSmoke;
+
    // 期間モード表示
    string periodModeText = (PeriodMode == PERIOD_FROM_STARTUP) ? "計算期間: EA起動時から" : "計算期間: 指定日時から";
-   UpdateLabel(g_prefix + "PeriodMode", periodModeText, baseColor);
+   UpdateLabel(g_prefix + "PeriodMode", periodModeText, periodModeColor);
 
    // 開始時刻表示
-   UpdateLabel(g_prefix + "StartTime", "開始: " + TimeToString(g_periodStartTime, TIME_DATE|TIME_MINUTES), grayColor);
+   UpdateLabel(g_prefix + "StartTime", "開始: " + TimeToString(g_periodStartTime, TIME_DATE|TIME_MINUTES), startTimeColor);
 
    // 残高表示
-   UpdateLabel(g_prefix + "StartBalance", "開始残高: " + DoubleToString(g_periodStartBalance, 2), baseColor);
-   UpdateLabel(g_prefix + "CurrentBalance", "現在残高: " + DoubleToString(currentBalance, 2), baseColor);
+   UpdateLabel(g_prefix + "StartBalance", "開始残高: " + DoubleToString(g_periodStartBalance, 2), balanceColor);
+   UpdateLabel(g_prefix + "CurrentBalance", "現在残高: " + DoubleToString(currentBalance, 2), balanceColor);
 
    // 損益表示
    color closedColor = g_targetReached ? baseColor : ((closedProfit >= 0) ? clrLime : clrRed);
