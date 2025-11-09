@@ -82,6 +82,7 @@ bool g_eaStopped = false;                                // EA停止フラグ
 bool g_pendingAutoTradingStop = false;                   // 自動売買停止待機フラグ
 datetime g_pendingStopStartTime = 0;                     // 自動売買停止待機開始時刻
 string g_prefix = "PPSEA_";                              // オブジェクト名プレフィックス
+bool g_lastAutoTradingEnabled = true;                    // 前回の自動売買状態
 
 // 表示最適化用キャッシュ
 double g_lastDisplayedBalance = 0;                       // 前回表示した残高
@@ -569,6 +570,7 @@ void PPSEA_Init()
    g_eaStopped = false;
    g_pendingAutoTradingStop = false;
    g_pendingStopStartTime = 0;
+   g_lastAutoTradingEnabled = IsAutoTradingEnabled();
 
    // 表示キャッシュ初期化
    g_lastDisplayedBalance = 0;
@@ -676,6 +678,39 @@ void PPSEA_OnTick()
       UpdateDisplay();
       return;
    }
+
+   // 自動売買の状態変化チェック（手動でONに戻された場合）
+   bool currentAutoTradingEnabled = IsAutoTradingEnabled();
+   if(!g_lastAutoTradingEnabled && currentAutoTradingEnabled && g_eaStopped)
+   {
+      // 停止状態から手動でONに戻された場合、リセットして再スタート
+      Print("===========================================");
+      Print("AutoTrading manually re-enabled. Resetting EA...");
+      Print("===========================================");
+
+      // 期間開始時刻をリセット
+      if(PeriodMode == PERIOD_FROM_STARTUP)
+      {
+         g_periodStartTime = TimeCurrent();
+      }
+      else
+      {
+         g_periodStartTime = StartDateTime;
+      }
+
+      // 開始残高を再取得
+      g_periodStartBalance = PPSEA_AccountBalance();
+
+      // フラグをリセット
+      g_targetReached = false;
+      g_eaStopped = false;
+      g_pendingAutoTradingStop = false;
+      g_pendingStopStartTime = 0;
+
+      Print("EA restarted from: ", TimeToString(g_periodStartTime, TIME_DATE|TIME_MINUTES));
+      Print("New start balance: ", DoubleToString(g_periodStartBalance, 2));
+   }
+   g_lastAutoTradingEnabled = currentAutoTradingEnabled;
 
    // EA停止中の場合は表示のみ更新
    if(g_eaStopped)
