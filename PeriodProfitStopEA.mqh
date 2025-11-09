@@ -608,6 +608,7 @@ void PPSEA_Init()
 void PPSEA_Deinit()
 {
    // オブジェクト削除
+   ObjectDelete(0, g_prefix + "Background");
    ObjectDelete(0, g_prefix + "Title");
    ObjectDelete(0, g_prefix + "PeriodMode");
    ObjectDelete(0, g_prefix + "StartTime");
@@ -964,37 +965,43 @@ void CloseAllPositions()
 //+------------------------------------------------------------------+
 void CreateDisplay()
 {
+   // 背景パネルの作成
+   int panelWidth = 350;
+   int panelHeight = 320;
+   CreatePanel(g_prefix + "Background", DisplayX - 5, DisplayY - 5, panelWidth, panelHeight);
+
    int y = DisplayY;
+   int lineHeight = 22;  // 行間を広げる
 
    CreateLabel(g_prefix + "Title", "■ 期間累計損益ストップEA", DisplayX, y, clrWhite, FontSize + 2, true);
-   y += 25;
+   y += 30;
 
    CreateLabel(g_prefix + "PeriodMode", "", DisplayX, y, clrSilver, FontSize);
-   y += 20;
+   y += lineHeight;
 
    CreateLabel(g_prefix + "StartTime", "", DisplayX, y, clrGray, FontSize - 1);
-   y += 20;
+   y += lineHeight;
 
    CreateLabel(g_prefix + "StartBalance", "", DisplayX, y, clrSilver, FontSize);
-   y += 20;
+   y += lineHeight;
 
    CreateLabel(g_prefix + "CurrentBalance", "", DisplayX, y, clrSilver, FontSize);
-   y += 20;
+   y += lineHeight + 3;
 
    CreateLabel(g_prefix + "ClosedProfit", "", DisplayX, y, clrWhite, FontSize);
-   y += 20;
+   y += lineHeight;
 
    CreateLabel(g_prefix + "OpenProfit", "", DisplayX, y, clrWhite, FontSize);
-   y += 20;
+   y += lineHeight;
 
    CreateLabel(g_prefix + "TotalProfit", "", DisplayX, y, clrWhite, FontSize + 1, true);
-   y += 25;
+   y += 28;
 
    CreateLabel(g_prefix + "ProfitTarget", "", DisplayX, y, clrGold, FontSize);
-   y += 20;
+   y += lineHeight;
 
    CreateLabel(g_prefix + "LossLimit", "", DisplayX, y, clrOrangeRed, FontSize);
-   y += 20;
+   y += lineHeight + 3;
 
    CreateLabel(g_prefix + "Status", "", DisplayX, y, clrWhite, FontSize + 1);
 }
@@ -1110,6 +1117,29 @@ void UpdateDisplay()
    else
    {
       UpdateLabel(g_prefix + "Status", "状態: 稼働中", clrLime);
+   }
+}
+
+//+------------------------------------------------------------------+
+//| パネル作成                                                      |
+//+------------------------------------------------------------------+
+void CreatePanel(string name, int x, int y, int width, int height)
+{
+   if(ObjectFind(0, name) < 0)
+   {
+      ObjectCreate(0, name, OBJ_RECTANGLE_LABEL, 0, 0, 0);
+      ObjectSetInteger(0, name, OBJPROP_CORNER, CORNER_LEFT_UPPER);
+      ObjectSetInteger(0, name, OBJPROP_XDISTANCE, x);
+      ObjectSetInteger(0, name, OBJPROP_YDISTANCE, y);
+      ObjectSetInteger(0, name, OBJPROP_XSIZE, width);
+      ObjectSetInteger(0, name, OBJPROP_YSIZE, height);
+      ObjectSetInteger(0, name, OBJPROP_BGCOLOR, clrBlack);
+      ObjectSetInteger(0, name, OBJPROP_BORDER_TYPE, BORDER_FLAT);
+      ObjectSetInteger(0, name, OBJPROP_COLOR, clrDimGray);
+      ObjectSetInteger(0, name, OBJPROP_STYLE, STYLE_SOLID);
+      ObjectSetInteger(0, name, OBJPROP_WIDTH, 1);
+      ObjectSetInteger(0, name, OBJPROP_BACK, true);
+      ObjectSetInteger(0, name, OBJPROP_SELECTABLE, false);
    }
 }
 
