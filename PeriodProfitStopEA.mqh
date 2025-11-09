@@ -54,7 +54,7 @@ sinput string separator2 = "=== 損益目標設定 ===";       // 損益目標�
 input bool EnableProfitTarget = true;                    // 利益目標を有効化
 input double ProfitTargetAmount = 10000.0;               // 利益目標金額
 input bool EnableLossLimit = true;                       // 損失制限を有効化
-input double LossLimitAmount = 5000.0;                   // 損失制限金額
+input double LossLimitAmount = 10000.0;                  // 損失制限金額
 input ENUM_TARGET_ACTION TargetAction = ACTION_CLOSE_AND_STOP; // 目標達成時のアクション
 
 sinput string separator3 = "=== 通知設定 ===";           // 通知設定
