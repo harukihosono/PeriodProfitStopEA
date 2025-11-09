@@ -5,7 +5,8 @@
       "Bash(ren DailyProfitTarget.mq5 DailyProfitTarget_OLD.mq5)",
       "Bash(ren:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
