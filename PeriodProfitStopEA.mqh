@@ -1008,14 +1008,14 @@ void CreateDisplay()
 {
    // 背景パネルの作成
    int panelWidth = 350;
-   int panelHeight = 320;
+   int panelHeight = 360;
    CreatePanel(g_prefix + "Background", DisplayX - 5, DisplayY - 5, panelWidth, panelHeight);
 
    int y = DisplayY;
-   int lineHeight = 22;  // 行間を広げる
+   int lineHeight = 26;  // 行間を広げる
 
    CreateLabel(g_prefix + "Title", "■ 期間累計損益ストップEA", DisplayX, y, clrWhite, FontSize + 2, true);
-   y += 30;
+   y += 35;
 
    CreateLabel(g_prefix + "PeriodMode", "", DisplayX, y, clrSilver, FontSize);
    y += lineHeight;
@@ -1027,7 +1027,7 @@ void CreateDisplay()
    y += lineHeight;
 
    CreateLabel(g_prefix + "CurrentBalance", "", DisplayX, y, clrSilver, FontSize);
-   y += lineHeight + 3;
+   y += lineHeight + 5;
 
    CreateLabel(g_prefix + "ClosedProfit", "", DisplayX, y, clrWhite, FontSize);
    y += lineHeight;
@@ -1036,13 +1036,13 @@ void CreateDisplay()
    y += lineHeight;
 
    CreateLabel(g_prefix + "TotalProfit", "", DisplayX, y, clrWhite, FontSize + 1, true);
-   y += 28;
+   y += 32;
 
    CreateLabel(g_prefix + "ProfitTarget", "", DisplayX, y, clrGold, FontSize);
    y += lineHeight;
 
    CreateLabel(g_prefix + "LossLimit", "", DisplayX, y, clrOrangeRed, FontSize);
-   y += lineHeight + 3;
+   y += lineHeight + 5;
 
    CreateLabel(g_prefix + "Status", "", DisplayX, y, clrWhite, FontSize + 1);
 }
