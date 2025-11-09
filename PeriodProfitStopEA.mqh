@@ -46,28 +46,28 @@ enum ENUM_TARGET_ACTION
 //+------------------------------------------------------------------+
 //| Input Parameters                                                |
 //+------------------------------------------------------------------+
-// === 期間設定 ===
+sinput string separator1 = "=== 期間設定 ===";           // 期間設定
 input ENUM_PERIOD_MODE PeriodMode = PERIOD_FROM_STARTUP; // 期間計算モード
 input datetime StartDateTime = D'2025.01.01 00:00';      // 開始日時(指定日時モード時)
 
-// === 損益目標設定 ===
+sinput string separator2 = "=== 損益目標設定 ===";       // 損益目標設定
 input bool EnableProfitTarget = true;                    // 利益目標を有効化
 input double ProfitTargetAmount = 10000.0;               // 利益目標金額
 input bool EnableLossLimit = true;                       // 損失制限を有効化
 input double LossLimitAmount = 5000.0;                   // 損失制限金額
 input ENUM_TARGET_ACTION TargetAction = ACTION_CLOSE_AND_STOP; // 目標達成時のアクション
 
-// === 通知設定 ===
+sinput string separator3 = "=== 通知設定 ===";           // 通知設定
 input bool EnableSound = true;                           // サウンド通知を有効化
 input string SoundFile = "alert.wav";                    // 通知サウンドファイル
 
-// === 表示設定 ===
+sinput string separator4 = "=== 表示設定 ===";           // 表示設定
 input int DisplayX = 10;                                 // 表示位置X座標
 input int DisplayY = 25;                                 // 表示位置Y座標
 input int FontSize = 10;                                 // フォントサイズ
 input string FontName = "MS Gothic";                     // フォント名（日本語対応）
 
-// === 決済設定 ===
+sinput string separator5 = "=== 決済設定 ===";           // 決済設定
 input int MaxRetries = 3;                                // 決済リトライ回数
 input int RetryDelay = 1000;                             // リトライ間隔(ミリ秒)
 input int MagicNumber = 0;                               // マジックナンバー(0=全ポジション)
