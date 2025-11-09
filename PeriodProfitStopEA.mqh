@@ -380,6 +380,46 @@ bool PPSEA_OrderClose(int ticket, double lots, double price, int slippage)
 #endif
 
 //+------------------------------------------------------------------+
+//| 金額をカンマ区切りでフォーマット                                 |
+//+------------------------------------------------------------------+
+string FormatMoney(double value, int digits = 2)
+{
+   string sign = "";
+   if(value < 0)
+   {
+      sign = "-";
+      value = MathAbs(value);
+   }
+
+   string str = DoubleToString(value, digits);
+   string result = "";
+   int dotPos = StringFind(str, ".");
+   string intPart = "";
+   string decPart = "";
+
+   if(dotPos >= 0)
+   {
+      intPart = StringSubstr(str, 0, dotPos);
+      decPart = StringSubstr(str, dotPos);
+   }
+   else
+   {
+      intPart = str;
+      decPart = "";
+   }
+
+   int len = StringLen(intPart);
+   for(int i = 0; i < len; i++)
+   {
+      if(i > 0 && (len - i) % 3 == 0)
+         result += ",";
+      result += StringSubstr(intPart, i, 1);
+   }
+
+   return sign + result + decPart;
+}
+
+//+------------------------------------------------------------------+
 //| エラーコード説明関数                                            |
 //+------------------------------------------------------------------+
 string ErrorDescription(int error_code)
@@ -1074,23 +1114,23 @@ void UpdateDisplay()
    UpdateLabel(g_prefix + "StartTime", "開始: " + TimeToString(g_periodStartTime, TIME_DATE|TIME_MINUTES), startTimeColor);
 
    // 残高表示
-   UpdateLabel(g_prefix + "StartBalance", "開始残高: " + DoubleToString(g_periodStartBalance, 2), balanceColor);
-   UpdateLabel(g_prefix + "CurrentBalance", "現在残高: " + DoubleToString(currentBalance, 2), balanceColor);
+   UpdateLabel(g_prefix + "StartBalance", "開始残高: " + FormatMoney(g_periodStartBalance, 2), balanceColor);
+   UpdateLabel(g_prefix + "CurrentBalance", "現在残高: " + FormatMoney(currentBalance, 2), balanceColor);
 
    // 損益表示
    color closedColor = g_targetReached ? baseColor : ((closedProfit >= 0) ? clrLime : clrRed);
    color openColor = g_targetReached ? baseColor : ((openProfit >= 0) ? clrLime : clrRed);
    color totalColor = g_targetReached ? baseColor : ((totalProfit >= 0) ? clrLime : clrRed);
 
-   UpdateLabel(g_prefix + "ClosedProfit", "決済済損益: " + DoubleToString(closedProfit, 2), closedColor);
-   UpdateLabel(g_prefix + "OpenProfit", "含み損益: " + DoubleToString(openProfit, 2), openColor);
-   UpdateLabel(g_prefix + "TotalProfit", "累計損益: " + DoubleToString(totalProfit, 2), totalColor);
+   UpdateLabel(g_prefix + "ClosedProfit", "決済済損益: " + FormatMoney(closedProfit, 2), closedColor);
+   UpdateLabel(g_prefix + "OpenProfit", "含み損益: " + FormatMoney(openProfit, 2), openColor);
+   UpdateLabel(g_prefix + "TotalProfit", "累計損益: " + FormatMoney(totalProfit, 2), totalColor);
 
    // 目標表示
    if(EnableProfitTarget)
    {
       double profitRemaining = ProfitTargetAmount - totalProfit;
-      string profitText = (totalProfit >= ProfitTargetAmount) ? "利益目標達成!" : "利益目標まで: " + DoubleToString(profitRemaining, 2);
+      string profitText = (totalProfit >= ProfitTargetAmount) ? "利益目標達成!" : "利益目標まで: " + FormatMoney(profitRemaining, 2);
       color profitTargetColor = g_targetReached ? baseColor : ((totalProfit >= ProfitTargetAmount) ? clrLime : clrGold);
       UpdateLabel(g_prefix + "ProfitTarget", profitText, profitTargetColor);
    }
@@ -1102,7 +1142,7 @@ void UpdateDisplay()
    if(EnableLossLimit)
    {
       double lossRemaining = LossLimitAmount + totalProfit;
-      string lossText = (totalProfit <= -LossLimitAmount) ? "損失制限到達!" : "損失制限まで: " + DoubleToString(lossRemaining, 2);
+      string lossText = (totalProfit <= -LossLimitAmount) ? "損失制限到達!" : "損失制限まで: " + FormatMoney(lossRemaining, 2);
       color lossLimitColor = g_targetReached ? baseColor : ((totalProfit <= -LossLimitAmount) ? clrRed : clrOrangeRed);
       UpdateLabel(g_prefix + "LossLimit", lossText, lossLimitColor);
    }
