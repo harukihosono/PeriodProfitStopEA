@@ -709,17 +709,17 @@ void PPSEA_OnTick()
       g_pendingStopStartTime = 0;
 
       // フォントサイズを元に戻す
-      UpdateLabelSize(g_prefix + "Title", FontSize + 2);
-      UpdateLabelSize(g_prefix + "PeriodMode", FontSize);
-      UpdateLabelSize(g_prefix + "StartTime", FontSize - 1);
-      UpdateLabelSize(g_prefix + "StartBalance", FontSize);
-      UpdateLabelSize(g_prefix + "CurrentBalance", FontSize);
-      UpdateLabelSize(g_prefix + "ClosedProfit", FontSize);
-      UpdateLabelSize(g_prefix + "OpenProfit", FontSize);
-      UpdateLabelSize(g_prefix + "TotalProfit", FontSize + 1);
-      UpdateLabelSize(g_prefix + "ProfitTarget", FontSize);
-      UpdateLabelSize(g_prefix + "LossLimit", FontSize);
-      UpdateLabelSize(g_prefix + "Status", FontSize + 1);
+      UpdateLabelSize(g_prefix + "Title", FontSize + 4);
+      UpdateLabelSize(g_prefix + "PeriodMode", FontSize + 2);
+      UpdateLabelSize(g_prefix + "StartTime", FontSize + 1);
+      UpdateLabelSize(g_prefix + "StartBalance", FontSize + 2);
+      UpdateLabelSize(g_prefix + "CurrentBalance", FontSize + 2);
+      UpdateLabelSize(g_prefix + "ClosedProfit", FontSize + 2);
+      UpdateLabelSize(g_prefix + "OpenProfit", FontSize + 2);
+      UpdateLabelSize(g_prefix + "TotalProfit", FontSize + 3);
+      UpdateLabelSize(g_prefix + "ProfitTarget", FontSize + 2);
+      UpdateLabelSize(g_prefix + "LossLimit", FontSize + 2);
+      UpdateLabelSize(g_prefix + "Status", FontSize + 3);
 
       Print("EA restarted from: ", TimeToString(g_periodStartTime, TIME_DATE|TIME_MINUTES));
       Print("New start balance: ", DoubleToString(g_periodStartBalance, 2));
@@ -973,37 +973,37 @@ void CreateDisplay()
    int y = DisplayY;
    int lineHeight = 22;  // 行間を広げる
 
-   CreateLabel(g_prefix + "Title", "■ 期間累計損益ストップEA", DisplayX, y, clrWhite, FontSize + 2, true);
+   CreateLabel(g_prefix + "Title", "■ 期間累計損益ストップEA", DisplayX, y, clrWhite, FontSize + 4, true);
    y += 30;
 
-   CreateLabel(g_prefix + "PeriodMode", "", DisplayX, y, clrSilver, FontSize);
+   CreateLabel(g_prefix + "PeriodMode", "", DisplayX, y, clrSilver, FontSize + 2);
    y += lineHeight;
 
-   CreateLabel(g_prefix + "StartTime", "", DisplayX, y, clrGray, FontSize - 1);
+   CreateLabel(g_prefix + "StartTime", "", DisplayX, y, clrGray, FontSize + 1);
    y += lineHeight;
 
-   CreateLabel(g_prefix + "StartBalance", "", DisplayX, y, clrSilver, FontSize);
+   CreateLabel(g_prefix + "StartBalance", "", DisplayX, y, clrSilver, FontSize + 2);
    y += lineHeight;
 
-   CreateLabel(g_prefix + "CurrentBalance", "", DisplayX, y, clrSilver, FontSize);
+   CreateLabel(g_prefix + "CurrentBalance", "", DisplayX, y, clrSilver, FontSize + 2);
    y += lineHeight + 3;
 
-   CreateLabel(g_prefix + "ClosedProfit", "", DisplayX, y, clrWhite, FontSize);
+   CreateLabel(g_prefix + "ClosedProfit", "", DisplayX, y, clrWhite, FontSize + 2);
    y += lineHeight;
 
-   CreateLabel(g_prefix + "OpenProfit", "", DisplayX, y, clrWhite, FontSize);
+   CreateLabel(g_prefix + "OpenProfit", "", DisplayX, y, clrWhite, FontSize + 2);
    y += lineHeight;
 
-   CreateLabel(g_prefix + "TotalProfit", "", DisplayX, y, clrWhite, FontSize + 1, true);
+   CreateLabel(g_prefix + "TotalProfit", "", DisplayX, y, clrWhite, FontSize + 3, true);
    y += 28;
 
-   CreateLabel(g_prefix + "ProfitTarget", "", DisplayX, y, clrGold, FontSize);
+   CreateLabel(g_prefix + "ProfitTarget", "", DisplayX, y, clrGold, FontSize + 2);
    y += lineHeight;
 
-   CreateLabel(g_prefix + "LossLimit", "", DisplayX, y, clrOrangeRed, FontSize);
+   CreateLabel(g_prefix + "LossLimit", "", DisplayX, y, clrOrangeRed, FontSize + 2);
    y += lineHeight + 3;
 
-   CreateLabel(g_prefix + "Status", "", DisplayX, y, clrWhite, FontSize + 1);
+   CreateLabel(g_prefix + "Status", "", DisplayX, y, clrWhite, FontSize + 3);
 }
 
 //+------------------------------------------------------------------+
@@ -1031,12 +1031,12 @@ void UpdateDisplay()
    // 停止時の全体カラーとサイズ設定
    color baseColor = clrSilver;
    color grayColor = clrGray;
-   int baseFontSize = FontSize;
-   int titleFontSize = FontSize + 2;
+   int baseFontSize = FontSize + 2;
+   int titleFontSize = FontSize + 4;
 
    if(g_targetReached)
    {
-      // 停止時：損益に応じて全体の色を変更し、フォントサイズを+2
+      // 停止時：損益に応じて全体の色を変更し、フォントサイズをさらに+2
       if(totalProfit >= 0)
       {
          baseColor = clrLime;
@@ -1047,13 +1047,13 @@ void UpdateDisplay()
          baseColor = clrRed;
          grayColor = clrRed;
       }
-      baseFontSize = FontSize + 2;
-      titleFontSize = FontSize + 4;
+      baseFontSize = FontSize + 4;
+      titleFontSize = FontSize + 6;
 
       // フォントサイズを更新
       UpdateLabelSize(g_prefix + "Title", titleFontSize);
       UpdateLabelSize(g_prefix + "PeriodMode", baseFontSize);
-      UpdateLabelSize(g_prefix + "StartTime", baseFontSize);
+      UpdateLabelSize(g_prefix + "StartTime", baseFontSize - 1);
       UpdateLabelSize(g_prefix + "StartBalance", baseFontSize);
       UpdateLabelSize(g_prefix + "CurrentBalance", baseFontSize);
       UpdateLabelSize(g_prefix + "ClosedProfit", baseFontSize);
