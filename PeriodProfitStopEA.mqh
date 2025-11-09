@@ -64,8 +64,7 @@ input string SoundFile = "alert.wav";                    // 通知サウンド�
 sinput string separator4 = "=== 表示設定 ===";           // 表示設定
 input int DisplayX = 10;                                 // 表示位置X座標
 input int DisplayY = 25;                                 // 表示位置Y座標
-input int FontSize = 12;                                 // 基本フォントサイズ
-input int FontSizeStopAdd = 2;                           // 停止時の追加サイズ
+input int FontSize = 12;                                 // フォントサイズ
 input string FontName = "MS Gothic";                     // フォント名（日本語対応）
 
 sinput string separator5 = "=== 決済設定 ===";           // 決済設定
@@ -749,19 +748,6 @@ void PPSEA_OnTick()
       g_pendingAutoTradingStop = false;
       g_pendingStopStartTime = 0;
 
-      // フォントサイズを元に戻す
-      UpdateLabelSize(g_prefix + "Title", FontSize + 2);
-      UpdateLabelSize(g_prefix + "PeriodMode", FontSize);
-      UpdateLabelSize(g_prefix + "StartTime", FontSize);
-      UpdateLabelSize(g_prefix + "StartBalance", FontSize);
-      UpdateLabelSize(g_prefix + "CurrentBalance", FontSize);
-      UpdateLabelSize(g_prefix + "ClosedProfit", FontSize);
-      UpdateLabelSize(g_prefix + "OpenProfit", FontSize);
-      UpdateLabelSize(g_prefix + "TotalProfit", FontSize + 1);
-      UpdateLabelSize(g_prefix + "ProfitTarget", FontSize);
-      UpdateLabelSize(g_prefix + "LossLimit", FontSize);
-      UpdateLabelSize(g_prefix + "Status", FontSize + 1);
-
       Print("EA restarted from: ", TimeToString(g_periodStartTime, TIME_DATE|TIME_MINUTES));
       Print("New start balance: ", DoubleToString(g_periodStartBalance, 2));
    }
@@ -1069,13 +1055,13 @@ void UpdateDisplay()
    g_lastDisplayedBalance = currentBalance;
    g_lastDisplayedProfit = totalProfit;
 
-   // 停止時の全体カラーとサイズ設定
+   // 停止時の全体カラー設定
    color baseColor = clrSilver;
    color grayColor = clrGray;
 
    if(g_targetReached)
    {
-      // 停止時：損益に応じて全体の色を変更し、フォントサイズを増加
+      // 停止時：損益に応じて全体の色を変更
       if(totalProfit >= 0)
       {
          baseColor = clrLime;
@@ -1086,19 +1072,6 @@ void UpdateDisplay()
          baseColor = clrRed;
          grayColor = clrRed;
       }
-
-      // フォントサイズを更新（パラメーター指定の追加サイズ）
-      UpdateLabelSize(g_prefix + "Title", FontSize + 2 + FontSizeStopAdd);
-      UpdateLabelSize(g_prefix + "PeriodMode", FontSize + FontSizeStopAdd);
-      UpdateLabelSize(g_prefix + "StartTime", FontSize + FontSizeStopAdd);
-      UpdateLabelSize(g_prefix + "StartBalance", FontSize + FontSizeStopAdd);
-      UpdateLabelSize(g_prefix + "CurrentBalance", FontSize + FontSizeStopAdd);
-      UpdateLabelSize(g_prefix + "ClosedProfit", FontSize + FontSizeStopAdd);
-      UpdateLabelSize(g_prefix + "OpenProfit", FontSize + FontSizeStopAdd);
-      UpdateLabelSize(g_prefix + "TotalProfit", FontSize + 1 + FontSizeStopAdd);
-      UpdateLabelSize(g_prefix + "ProfitTarget", FontSize + FontSizeStopAdd);
-      UpdateLabelSize(g_prefix + "LossLimit", FontSize + FontSizeStopAdd);
-      UpdateLabelSize(g_prefix + "Status", FontSize + 1 + FontSizeStopAdd);
    }
 
    // 停止時以外の基本色を調整
