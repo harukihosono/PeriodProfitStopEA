@@ -707,6 +707,19 @@ void PPSEA_OnTick()
       g_pendingAutoTradingStop = false;
       g_pendingStopStartTime = 0;
 
+      // フォントサイズを元に戻す
+      UpdateLabelSize(g_prefix + "Title", FontSize + 2);
+      UpdateLabelSize(g_prefix + "PeriodMode", FontSize);
+      UpdateLabelSize(g_prefix + "StartTime", FontSize - 1);
+      UpdateLabelSize(g_prefix + "StartBalance", FontSize);
+      UpdateLabelSize(g_prefix + "CurrentBalance", FontSize);
+      UpdateLabelSize(g_prefix + "ClosedProfit", FontSize);
+      UpdateLabelSize(g_prefix + "OpenProfit", FontSize);
+      UpdateLabelSize(g_prefix + "TotalProfit", FontSize + 1);
+      UpdateLabelSize(g_prefix + "ProfitTarget", FontSize);
+      UpdateLabelSize(g_prefix + "LossLimit", FontSize);
+      UpdateLabelSize(g_prefix + "Status", FontSize + 1);
+
       Print("EA restarted from: ", TimeToString(g_periodStartTime, TIME_DATE|TIME_MINUTES));
       Print("New start balance: ", DoubleToString(g_periodStartBalance, 2));
    }
@@ -1008,21 +1021,57 @@ void UpdateDisplay()
    g_lastDisplayedBalance = currentBalance;
    g_lastDisplayedProfit = totalProfit;
 
+   // 停止時の全体カラーとサイズ設定
+   color baseColor = clrSilver;
+   color grayColor = clrGray;
+   int baseFontSize = FontSize;
+   int titleFontSize = FontSize + 2;
+
+   if(g_targetReached)
+   {
+      // 停止時：損益に応じて全体の色を変更し、フォントサイズを+2
+      if(totalProfit >= 0)
+      {
+         baseColor = clrLime;
+         grayColor = clrLime;
+      }
+      else
+      {
+         baseColor = clrRed;
+         grayColor = clrRed;
+      }
+      baseFontSize = FontSize + 2;
+      titleFontSize = FontSize + 4;
+
+      // フォントサイズを更新
+      UpdateLabelSize(g_prefix + "Title", titleFontSize);
+      UpdateLabelSize(g_prefix + "PeriodMode", baseFontSize);
+      UpdateLabelSize(g_prefix + "StartTime", baseFontSize);
+      UpdateLabelSize(g_prefix + "StartBalance", baseFontSize);
+      UpdateLabelSize(g_prefix + "CurrentBalance", baseFontSize);
+      UpdateLabelSize(g_prefix + "ClosedProfit", baseFontSize);
+      UpdateLabelSize(g_prefix + "OpenProfit", baseFontSize);
+      UpdateLabelSize(g_prefix + "TotalProfit", baseFontSize + 1);
+      UpdateLabelSize(g_prefix + "ProfitTarget", baseFontSize);
+      UpdateLabelSize(g_prefix + "LossLimit", baseFontSize);
+      UpdateLabelSize(g_prefix + "Status", baseFontSize + 1);
+   }
+
    // 期間モード表示
    string periodModeText = (PeriodMode == PERIOD_FROM_STARTUP) ? "計算期間: EA起動時から" : "計算期間: 指定日時から";
-   UpdateLabel(g_prefix + "PeriodMode", periodModeText, clrSilver);
+   UpdateLabel(g_prefix + "PeriodMode", periodModeText, baseColor);
 
    // 開始時刻表示
-   UpdateLabel(g_prefix + "StartTime", "開始: " + TimeToString(g_periodStartTime, TIME_DATE|TIME_MINUTES), clrGray);
+   UpdateLabel(g_prefix + "StartTime", "開始: " + TimeToString(g_periodStartTime, TIME_DATE|TIME_MINUTES), grayColor);
 
    // 残高表示
-   UpdateLabel(g_prefix + "StartBalance", "開始残高: " + DoubleToString(g_periodStartBalance, 2), clrSilver);
-   UpdateLabel(g_prefix + "CurrentBalance", "現在残高: " + DoubleToString(currentBalance, 2), clrSilver);
+   UpdateLabel(g_prefix + "StartBalance", "開始残高: " + DoubleToString(g_periodStartBalance, 2), baseColor);
+   UpdateLabel(g_prefix + "CurrentBalance", "現在残高: " + DoubleToString(currentBalance, 2), baseColor);
 
    // 損益表示
-   color closedColor = (closedProfit >= 0) ? clrLime : clrRed;
-   color openColor = (openProfit >= 0) ? clrLime : clrRed;
-   color totalColor = (totalProfit >= 0) ? clrLime : clrRed;
+   color closedColor = g_targetReached ? baseColor : ((closedProfit >= 0) ? clrLime : clrRed);
+   color openColor = g_targetReached ? baseColor : ((openProfit >= 0) ? clrLime : clrRed);
+   color totalColor = g_targetReached ? baseColor : ((totalProfit >= 0) ? clrLime : clrRed);
 
    UpdateLabel(g_prefix + "ClosedProfit", "決済済損益: " + DoubleToString(closedProfit, 2), closedColor);
    UpdateLabel(g_prefix + "OpenProfit", "含み損益: " + DoubleToString(openProfit, 2), openColor);
@@ -1033,30 +1082,30 @@ void UpdateDisplay()
    {
       double profitRemaining = ProfitTargetAmount - totalProfit;
       string profitText = (totalProfit >= ProfitTargetAmount) ? "利益目標達成!" : "利益目標まで: " + DoubleToString(profitRemaining, 2);
-      color profitTargetColor = (totalProfit >= ProfitTargetAmount) ? clrLime : clrGold;
+      color profitTargetColor = g_targetReached ? baseColor : ((totalProfit >= ProfitTargetAmount) ? clrLime : clrGold);
       UpdateLabel(g_prefix + "ProfitTarget", profitText, profitTargetColor);
    }
    else
    {
-      UpdateLabel(g_prefix + "ProfitTarget", "利益目標: 無効", clrGray);
+      UpdateLabel(g_prefix + "ProfitTarget", "利益目標: 無効", g_targetReached ? baseColor : clrGray);
    }
 
    if(EnableLossLimit)
    {
       double lossRemaining = LossLimitAmount + totalProfit;
       string lossText = (totalProfit <= -LossLimitAmount) ? "損失制限到達!" : "損失制限まで: " + DoubleToString(lossRemaining, 2);
-      color lossLimitColor = (totalProfit <= -LossLimitAmount) ? clrRed : clrOrangeRed;
+      color lossLimitColor = g_targetReached ? baseColor : ((totalProfit <= -LossLimitAmount) ? clrRed : clrOrangeRed);
       UpdateLabel(g_prefix + "LossLimit", lossText, lossLimitColor);
    }
    else
    {
-      UpdateLabel(g_prefix + "LossLimit", "損失制限: 無効", clrGray);
+      UpdateLabel(g_prefix + "LossLimit", "損失制限: 無効", g_targetReached ? baseColor : clrGray);
    }
 
    // ステータス表示
    if(g_targetReached)
    {
-      UpdateLabel(g_prefix + "Status", "状態: 目標達成(停止)", clrLime);
+      UpdateLabel(g_prefix + "Status", "状態: 目標達成(停止)", baseColor);
    }
    else
    {
@@ -1099,5 +1148,16 @@ void UpdateLabel(string name, string text, color clr)
    {
       ObjectSetString(0, name, OBJPROP_TEXT, text);
       ObjectSetInteger(0, name, OBJPROP_COLOR, clr);
+   }
+}
+
+//+------------------------------------------------------------------+
+//| ラベルサイズ更新                                                |
+//+------------------------------------------------------------------+
+void UpdateLabelSize(string name, int size)
+{
+   if(ObjectFind(0, name) >= 0)
+   {
+      ObjectSetInteger(0, name, OBJPROP_FONTSIZE, size);
    }
 }
