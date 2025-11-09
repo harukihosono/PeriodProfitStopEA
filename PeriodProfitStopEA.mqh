@@ -1138,8 +1138,9 @@ void CreatePanel(string name, int x, int y, int width, int height)
       ObjectSetInteger(0, name, OBJPROP_COLOR, C'60,60,80');     // 枠線の色
       ObjectSetInteger(0, name, OBJPROP_STYLE, STYLE_SOLID);
       ObjectSetInteger(0, name, OBJPROP_WIDTH, 1);
-      ObjectSetInteger(0, name, OBJPROP_BACK, true);
+      ObjectSetInteger(0, name, OBJPROP_BACK, false);            // 前面に表示
       ObjectSetInteger(0, name, OBJPROP_SELECTABLE, false);
+      ObjectSetInteger(0, name, OBJPROP_ZORDER, 0);              // 最前面
    }
 }
 
