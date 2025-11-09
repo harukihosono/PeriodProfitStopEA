@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ren DailyProfitTarget.mq4 DailyProfitTarget_OLD.mq4)",
+      "Bash(ren DailyProfitTarget.mq5 DailyProfitTarget_OLD.mq5)",
+      "Bash(ren:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "chrome-devtools"
+  ]
+}
